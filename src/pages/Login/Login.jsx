@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import {
   LoadCanvasTemplate,
   loadCaptchaEnginge,
   validateCaptcha,
 } from "react-simple-captcha";
+import { AuthContext } from "../../providers/AtuhProvider";
 
 const Login = () => {
   const captchaRef = useRef(null);
@@ -12,12 +13,18 @@ const Login = () => {
     loadCaptchaEnginge(6);
   }, []);
 
+  const { loginUser } = useContext(AuthContext);
+
   const handleLogin = (e) => {
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
     console.log(email, password);
+    loginUser(email, password).then((result) => {
+      const user = result.user;
+      console.log(user);
+    });
   };
 
   const handleValidateCaptcha = () => {
@@ -25,7 +32,7 @@ const Login = () => {
     if (validateCaptcha(userCaptchaValue)) {
       setDisabled(false);
     } else {
-        setDisabled(true)
+      setDisabled(true);
     }
   };
   return (
@@ -90,7 +97,11 @@ const Login = () => {
               </button>
             </div>
             <div className="form-control mt-6">
-              <button className="btn btn-primary" type="submit" disabled={disabled}>
+              <button
+                className="btn btn-primary"
+                type="submit"
+                disabled={disabled}
+              >
                 Login
               </button>
             </div>
