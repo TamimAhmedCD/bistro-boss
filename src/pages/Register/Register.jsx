@@ -1,6 +1,6 @@
-// import { useContext, useEffect, useRef, useState } from "react";
-import { useForm, } from "react-hook-form";
-// import { AuthContext } from "../../providers/AtuhProvider";
+import { useContext } from "react";
+import { useForm } from "react-hook-form";
+import { AuthContext } from "../../providers/AtuhProvider";
 
 const Register = () => {
   const {
@@ -8,37 +8,43 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  
-  const onSubmit = (data) => console.log(data)
 
-//   const captchaRef = useRef(null);
-//   const [disabled, setDisabled] = useState(true);
-//   useEffect(() => {
-//     loadCaptchaEnginge(6);
-//   }, []);
+  const { createUser } = useContext(AuthContext);
 
-//   const { createUser } = useContext(AuthContext);
+  const onSubmit = (data) => {
+    console.log(data);
+    createUser(data.email, data.password).then((result) => {
+      const loggedUser = result.user;
+      console.log(loggedUser);
+    });
+  };
 
-//   const handleRegister = (e) => {
-//     e.preventDefault();
-//     const form = e.target;
-//     const email = form.email.value;
-//     const password = form.password.value;
-//     console.log(email, password);
-//     createUser(email, password).then((result) => {
-//       const user = result.user;
-//       console.log(user);
-//     });
-//   };
+  //   const captchaRef = useRef(null);
+  //   const [disabled, setDisabled] = useState(true);
+  //   useEffect(() => {
+  //     loadCaptchaEnginge(6);
+  //   }, []);
 
-//   const handleValidateCaptcha = () => {
-//     const userCaptchaValue = captchaRef.current.value;
-//     if (validateCaptcha(userCaptchaValue)) {
-//       setDisabled(false);
-//     } else {
-//       setDisabled(true);
-//     }
-//   };
+  //   const handleRegister = (e) => {
+  //     e.preventDefault();
+  //     const form = e.target;
+  //     const email = form.email.value;
+  //     const password = form.password.value;
+  //     console.log(email, password);
+  //     createUser(email, password).then((result) => {
+  //       const user = result.user;
+  //       console.log(user);
+  //     });
+  //   };
+
+  //   const handleValidateCaptcha = () => {
+  //     const userCaptchaValue = captchaRef.current.value;
+  //     if (validateCaptcha(userCaptchaValue)) {
+  //       setDisabled(false);
+  //     } else {
+  //       setDisabled(true);
+  //     }
+  //   };
   return (
     <div className="hero bg-base-200 min-h-screen">
       <div className="hero-content flex">
@@ -57,7 +63,7 @@ const Register = () => {
                 <span className="label-text">Name</span>
               </label>
               <input
-              {...register("name", {required: true})}
+                {...register("name", { required: true })}
                 name="name"
                 type="text"
                 placeholder="Enter Your Name"
@@ -70,7 +76,7 @@ const Register = () => {
                 <span className="label-text">Email</span>
               </label>
               <input
-              {...register("email", {required: true})}
+                {...register("email", { required: true })}
                 name="email"
                 type="email"
                 placeholder="email"
@@ -83,13 +89,32 @@ const Register = () => {
                 <span className="label-text">Password</span>
               </label>
               <input
-              {...register("password", {required: true, minLength:6, maxLength: 16})}
+                {...register("password", {
+                  required: true,
+                  minLength: 6,
+                  maxLength: 16,
+                  pattern: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])/,
+                })}
                 name="password"
                 type="password"
                 placeholder="password"
                 className="input input-bordered"
               />
-              {errors.password && <span>This field is required</span>}
+              {errors.password?.type === "required" && (
+                <span>Password is Required</span>
+              )}
+              {errors.password?.type === "minLength" && (
+                <span>Password must be 6 characters</span>
+              )}
+              {errors.password?.type === "maxLength" && (
+                <span>Password must be less then 20 characters</span>
+              )}
+              {errors.password?.type === "pattern" && (
+                <span>
+                  Password must have on uppercase one lowercase, on number and
+                  one special character
+                </span>
+              )}
               <label className="label">
                 <a href="#" className="label-text-alt link link-hover">
                   Forgot password?
@@ -98,10 +123,7 @@ const Register = () => {
             </div>
 
             <div className="form-control mt-6">
-              <button
-                className="btn btn-primary"
-                type="submit"
-              >
+              <button className="btn btn-primary" type="submit">
                 Register
               </button>
             </div>
