@@ -94,7 +94,7 @@ const NavBar = () => {
             <Link className="btn" onClick={handleLogOut}>Log out</Link>
           </div>
         ) : (
-          <div className="navbar-end">
+          <div className="navbar-end gap-3">
             <Link to="/register" className="btn">
               Register
             </Link>
