@@ -3,19 +3,20 @@ import { AuthContext } from "./../../providers/AtuhProvider";
 import Swal from "sweetalert2";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosSecure from "./../../hooks/useAxiosSecure";
+import useCart from "../../hooks/useCart";
 
 const FoodCard = ({ item }) => {
   const { name, image, price, recipe, _id } = item;
-  const { user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext); //   AuthContext
   const navigate = useNavigate();
   const location = useLocation();
   const axiosSecure = useAxiosSecure(); //   useAxiosSecure hook
+  const [, refetch] = useCart(); //   useCart hook
 
   //   add to cart post request
-  const handleAddToCart = (food) => {
+  const handleAddToCart = () => {
     if (user && user.email) {
-      console.log(user.email, food);
-      // add to cart
+      //   cart item object
       const cartItem = {
         menuId: _id,
         email: user.email,
@@ -23,15 +24,20 @@ const FoodCard = ({ item }) => {
         image,
         price,
       };
+
+      //   post request to add to cart
       axiosSecure.post("/carts", cartItem).then((res) => {
-        console.log(res.data);
         if (res.data.insertedId) {
+          //   if added to cart successfully
           Swal.fire({
             title: `${name} added to your cart`,
             icon: "success",
             showConfirmButton: false,
             timer: 1500,
           });
+
+          //   refetch the cart to update the cart items count in the navbar
+          refetch();
         }
       });
     } else {
@@ -66,7 +72,7 @@ const FoodCard = ({ item }) => {
         <div className="card-actions justify-end">
           <button
             className="btn btn-outline bg-slate-100 border-0 border-b-4 border-orange-400 mt-4"
-            onClick={() => handleAddToCart(item)}
+            onClick={handleAddToCart}
           >
             Add to Cart
           </button>
