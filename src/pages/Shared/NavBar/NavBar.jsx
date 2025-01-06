@@ -67,7 +67,7 @@ const NavBar = () => {
               <div className="badge badge-secondary absolute badge-xs bottom-8 left-5">
                 +{cart.length}
               </div>
-              <Link to="/cart" className="rounded-full">
+              <Link to="/dashboard/cart" className="rounded-full">
                 <FaCartShopping className="text-lg" />
               </Link>
             </div>
