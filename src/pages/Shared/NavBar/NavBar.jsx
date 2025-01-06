@@ -1,14 +1,14 @@
 import { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../../../providers/AtuhProvider";
+import { FaCartShopping } from "react-icons/fa6";
 
 const NavBar = () => {
   const { user, logOut } = useContext(AuthContext);
 
   const handleLogOut = () => {
-    logOut()
-    .then(() => {})
-  }
+    logOut().then(() => {});
+  };
 
   const navOptions = (
     <>
@@ -59,12 +59,14 @@ const NavBar = () => {
         </div>
         {user ? (
           <div className="navbar-end gap-3">
+            <div className="btn btn-circle relative">
+            <div className="badge badge-secondary absolute badge-xs bottom-8 left-5">+0</div>
+              <Link to="/cart" className="rounded-full">
+                <FaCartShopping className="text-lg" />
+              </Link>
+            </div>
             <div className="dropdown">
-              <div
-                tabIndex={0}
-                role="button"
-                className="rounded-full"
-              >
+              <div tabIndex={0} role="button" className="rounded-full">
                 {user.photoURL ? (
                   <img
                     src={user.photoURL}
@@ -91,7 +93,9 @@ const NavBar = () => {
                 </li>
               </ul>
             </div>
-            <Link className="btn" onClick={handleLogOut}>Log out</Link>
+            <Link className="btn" onClick={handleLogOut}>
+              Log out
+            </Link>
           </div>
         ) : (
           <div className="navbar-end gap-3">
