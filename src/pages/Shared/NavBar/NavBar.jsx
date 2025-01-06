@@ -6,10 +6,12 @@ import { FaCartShopping } from "react-icons/fa6";
 const NavBar = () => {
   const { user, logOut } = useContext(AuthContext);
 
+  //   logOut function
   const handleLogOut = () => {
     logOut().then(() => {});
   };
 
+  //   navigation options
   const navOptions = (
     <>
       <li>
@@ -60,7 +62,9 @@ const NavBar = () => {
         {user ? (
           <div className="navbar-end gap-3">
             <div className="btn btn-circle relative">
-            <div className="badge badge-secondary absolute badge-xs bottom-8 left-5">+0</div>
+              <div className="badge badge-secondary absolute badge-xs bottom-8 left-5">
+                +0
+              </div>
               <Link to="/cart" className="rounded-full">
                 <FaCartShopping className="text-lg" />
               </Link>
