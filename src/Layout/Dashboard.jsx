@@ -1,8 +1,8 @@
-import { FaCalendarDays, FaCartShopping, FaWallet } from "react-icons/fa6";
-import { MdReviews } from "react-icons/md";
+import { FaCalendarDays, FaCartShopping, FaShop, FaWallet } from "react-icons/fa6";
+import { MdEmail, MdReviews } from "react-icons/md";
 import { BsCalendarCheckFill } from "react-icons/bs";
-import { NavLink, Outlet } from "react-router-dom";
-import { IoHome } from "react-icons/io5";
+import { Link, NavLink, Outlet } from "react-router-dom";
+import { IoHome, IoMenu } from "react-icons/io5";
 
 const Dashboard = () => {
   return (
@@ -45,9 +45,34 @@ const Dashboard = () => {
                My Booking
             </NavLink>
           </li>
+          <div className="divider"></div>
+          <li>
+            <Link to="/">
+            <IoHome />
+               Home
+            </Link>
+          </li>
+          <li>
+            <Link to="/menu">
+            <IoMenu />
+               Menu
+            </Link>
+          </li>
+          <li>
+            <Link to="/order/salad">
+            <FaShop />
+               Shop
+            </Link>
+          </li>
+          <li>
+            <Link to="/">
+            <MdEmail />
+               Contact
+            </Link>
+          </li>
         </ul>
       </div>
-      <div className="flex">
+      <div className="flex p-8">
         <Outlet></Outlet>
       </div>
     </div>
