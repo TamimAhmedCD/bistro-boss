@@ -5,6 +5,7 @@ import { Helmet } from "react-helmet-async";
 import Swal from "sweetalert2";
 import { NavLink, useNavigate } from "react-router-dom";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
+import SocialLogin from "../../components/SocialLogin/SocialLogin";
 
 const Register = () => {
   const axiosPublic = useAxiosPublic();
@@ -150,9 +151,10 @@ const Register = () => {
             </form>
             <div>
               <p>Have already account?</p>
-              <div className="divider"></div>
               <NavLink to='/login'>Login</NavLink>
             </div>
+              <div className="divider"></div>
+              <SocialLogin></SocialLogin>
           </div>
         </div>
       </div>
