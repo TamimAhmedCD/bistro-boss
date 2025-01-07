@@ -3,9 +3,12 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "../../providers/AtuhProvider";
 import { Helmet } from "react-helmet-async";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Register = () => {
+  const axiosPublic = useAxiosPublic();
+
   const {
     register,
     handleSubmit,
@@ -22,14 +25,24 @@ const Register = () => {
       console.log(loggedUser);
       updateUserProfile(data.name, data.photoURL)
         .then(() => {
-          reset();
-          Swal.fire({
-            title: "Register Success!",
-            text: "Successfully Register",
-            icon: "success",
-            timer: 1500,
+          // create user entry in the database
+          const userInfo = {
+            name: data.name,
+            email: data.email,
+          };
+          axiosPublic.post("/users", userInfo).then((res) => {
+            if (res.data.insertedId) {
+              console.log('user added to the database');
+              reset();
+              Swal.fire({
+                title: "Register Success!",
+                text: "Successfully Register",
+                icon: "success",
+                timer: 1500,
+              });
+              navigate("/");
+            }
           });
-          navigate('/')
         })
         .catch((error) => {
           console.log(error);
@@ -135,6 +148,11 @@ const Register = () => {
                 </button>
               </div>
             </form>
+            <div>
+              <p>Have already account?</p>
+              <div className="divider"></div>
+              <NavLink to='/login'>Login</NavLink>
+            </div>
           </div>
         </div>
       </div>

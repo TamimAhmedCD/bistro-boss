@@ -7,15 +7,16 @@ import {
 import { AuthContext } from "../../providers/AtuhProvider";
 import { Helmet } from "react-helmet-async";
 import Swal from "sweetalert2";
-import { useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import SocialLogin from "../../components/SocialLogin/SocialLogin";
 
 const Login = () => {
   const captchaRef = useRef(null);
   const [disabled, setDisabled] = useState(true);
-  const location = useLocation()
-  const navigate = useNavigate()
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const from = location.state?.from?.pathname || '/'
+  const from = location.state?.from?.pathname || "/";
 
   useEffect(() => {
     loadCaptchaEnginge(6);
@@ -29,8 +30,7 @@ const Login = () => {
     const email = form.email.value;
     const password = form.password.value;
     console.log(email, password);
-    loginUser(email, password)
-    .then((result) => {
+    loginUser(email, password).then((result) => {
       const user = result.user;
       console.log(user);
       Swal.fire({
@@ -38,7 +38,7 @@ const Login = () => {
         text: "Successfully Login",
         icon: "success",
       });
-      navigate(from, {replace: true})
+      navigate(from, { replace: true });
     });
   };
 
@@ -125,6 +125,12 @@ const Login = () => {
                 </button>
               </div>
             </form>
+            <div>
+              <p>Don&apos;t have account?</p>
+              <NavLink to="/register">Register</NavLink>
+            </div>
+            <div className="divider"></div>
+            <SocialLogin></SocialLogin>
           </div>
         </div>
       </div>
