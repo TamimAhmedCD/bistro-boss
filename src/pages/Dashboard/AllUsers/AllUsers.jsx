@@ -9,7 +9,11 @@ const AllUsers = () => {
   const { data: users = [], refetch } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const res = await axisSecure.get("/users");
+      const res = await axisSecure.get("/users", {
+        headers: {
+          authorization: `Bearer`
+        }
+      });
       return res.data;
     },
   });
