@@ -14,6 +14,21 @@ const AllUsers = () => {
     },
   });
 
+  const handleMakeAdmin = user => {
+    axisSecure.patch(`/users/admin/${user}`)
+    .then(res => {
+      console.log(res.data);
+      if(res.data.modifiedCount > 0) {
+        refetch()
+        Swal.fire({
+          title: "Good job!",
+          text: `${user.name} in an Admin Now`,
+          icon: "success"
+        });
+      }
+    })
+  }
+
   const handleDeleteUser = (user) => {
     Swal.fire({
       title: "Are you sure?",
@@ -25,7 +40,7 @@ const AllUsers = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axisSecure.delete(`/users/${user._id}`).then((res) => {
+        axisSecure.delete(`/users/${user}`).then((res) => {
           if (res.data.deletedCount > 0) {
             refetch();
             Swal.fire({
@@ -65,12 +80,12 @@ const AllUsers = () => {
                 <td>{user.name}</td>
                 <td>{user.email}</td>
                 <td>
-                  <button
-                    onClick={() => handleDeleteUser(user._id)}
+                  { user.role === 'admin' ? "Admin" : <button
+                    onClick={() => handleMakeAdmin(user._id)}
                     className="btn bg-orange-400"
                   >
                     <FaUsers className="text-white"> </FaUsers>
-                  </button>
+                  </button>}
                 </td>
                 <td>
                   <button
