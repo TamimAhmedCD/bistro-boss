@@ -15,6 +15,15 @@ const useAxiosSecure = () => {
       return Promise.reject(error);
     }
   );
+
+  axiosSecure.interceptors.response.use(function (res){
+    return res
+  }, function(error){
+    const status = error.response.status
+    console.log('status error in the interceptors', status);
+    return Promise.reject(error)
+  })
+
   return axiosSecure;
 };
 
