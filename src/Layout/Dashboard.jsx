@@ -15,9 +15,10 @@ import {
 import { BsCalendarCheckFill } from "react-icons/bs";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { IoHome, IoMenu } from "react-icons/io5";
+import useAdmin from "../hooks/useAdmin";
 
 const Dashboard = () => {
-  const isAdmin = true;
+  const [isAdmin] = useAdmin();
 
   return (
     <div className="flex">
