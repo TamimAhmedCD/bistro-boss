@@ -22,7 +22,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex">
-      <div className="w-64 min-h-screen bg-orange-400">
+      <div className="w-64 bg-orange-400 min-h-screen">
         <ul className="menu p-4 text-black gap-2">
           {isAdmin ? (
             // admin nav
@@ -138,7 +138,7 @@ const Dashboard = () => {
           </li>
         </ul>
       </div>
-      <div className="flex p-8">
+      <div className="flex-1 p-8">
         <Outlet></Outlet>
       </div>
     </div>
