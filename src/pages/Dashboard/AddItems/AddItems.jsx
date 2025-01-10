@@ -3,12 +3,13 @@ import SectionTitle from "../../../components/SectionTitle/SectionTitle";
 import { FaUtensils } from "react-icons/fa6";
 import useAxiosPublic from "./../../../hooks/useAxiosPublic";
 import useAxiosSecure from "./../../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
 const AddItems = () => {
   const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
   const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const axiosPublic = useAxiosPublic();
   const axiosSecure = useAxiosSecure();
   const onSubmit = async (data) => {
@@ -32,7 +33,14 @@ const AddItems = () => {
       const menuRes = await axiosSecure.post("/menu", menuItem);
       console.log(menuRes.data);
       if (menuRes.data.insertedId) {
+        reset();
         // show success message
+        Swal.fire({
+          title: "Good job!",
+          text: "Item added to the menu",
+          timer: 1500,
+          showConfirmButton: false
+        });
       }
     }
     console.log("with image url", res.data);
