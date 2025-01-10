@@ -2,17 +2,39 @@ import { FaTrash } from "react-icons/fa6";
 import SectionTitle from "../../../components/SectionTitle/SectionTitle";
 import useMenu from "./../../../hooks/useMenu";
 import { MdEdit } from "react-icons/md";
+import Swal from "sweetalert2";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const ManageItems = () => {
   const [menu] = useMenu();
 
-  const handleDeleteItem = item => {
+  const axiosSecure = useAxiosSecure();
 
-  }
+  const handleDeleteItem = (item) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/menu/${item}`).then((res) => {
+          if (res.data.deletedCount > 0) {
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your Item has been deleted.",
+              icon: "success",
+            });
+          }
+        });
+      }
+    });
+  };
 
-  const handleUpdateItem = item => {
-
-  }
+  const handleUpdateItem = (item) => {};
   return (
     <div>
       <SectionTitle heading="Manage All Items" subHeading="Hurry Up" />
