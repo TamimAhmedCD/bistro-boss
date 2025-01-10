@@ -4,9 +4,10 @@ import useMenu from "./../../../hooks/useMenu";
 import { MdEdit } from "react-icons/md";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { Link } from "react-router-dom";
 
 const ManageItems = () => {
-  const [menu] = useMenu();
+  const [menu, , refetch] = useMenu();
 
   const axiosSecure = useAxiosSecure();
 
@@ -23,6 +24,7 @@ const ManageItems = () => {
       if (result.isConfirmed) {
         axiosSecure.delete(`/menu/${item}`).then((res) => {
           if (res.data.deletedCount > 0) {
+            refetch();
             Swal.fire({
               title: "Deleted!",
               text: "Your Item has been deleted.",
@@ -34,7 +36,6 @@ const ManageItems = () => {
     });
   };
 
-  const handleUpdateItem = (item) => {};
   return (
     <div>
       <SectionTitle heading="Manage All Items" subHeading="Hurry Up" />
@@ -68,12 +69,12 @@ const ManageItems = () => {
                   <td>{item.name}</td>
                   <td>{item.price}</td>
                   <td>
-                    <button
-                      onClick={() => handleUpdateItem(item._id)}
-                      className="btn bg-orange-500"
-                    >
-                      <MdEdit className="text-white"> </MdEdit>
-                    </button>
+                    <Link to={`/dashboard/update-item/${item._id}`}>
+                      {" "}
+                      <button className="btn bg-orange-500">
+                        <MdEdit className="text-white"> </MdEdit>
+                      </button>
+                    </Link>
                   </td>
                   <td>
                     <button
