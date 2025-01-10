@@ -1,11 +1,41 @@
 import { useForm } from "react-hook-form";
 import SectionTitle from "../../../components/SectionTitle/SectionTitle";
 import { FaUtensils } from "react-icons/fa6";
+import useAxiosPublic from "./../../../hooks/useAxiosPublic";
+import useAxiosSecure from "./../../../hooks/useAxiosSecure";
 
 const AddItems = () => {
+  const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+  const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
+
   const { register, handleSubmit } = useForm();
-  const onSubmit = (data) => {
+  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
+  const onSubmit = async (data) => {
     console.log(data);
+
+    const imageFile = { image: data.image[0] };
+    const res = await axiosPublic.post(image_hosting_api, imageFile, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    });
+    if (res.data.success) {
+      // now send menu item data to the server with image the url
+      const menuItem = {
+        name: data.name,
+        category: data.category,
+        price: parseFloat(data.price),
+        recipe: data.recipe,
+        image: res.data.data.display_url,
+      };
+      const menuRes = await axiosSecure.post("/menu", menuItem);
+      console.log(menuRes.data);
+      if (menuRes.data.insertedId) {
+        // show success message
+      }
+    }
+    console.log("with image url", res.data);
   };
   return (
     <div className="">
@@ -22,7 +52,7 @@ const AddItems = () => {
             <input
               type="text"
               placeholder="Recipe Name"
-              {...register("name", {required: true})}
+              {...register("name", { required: true })}
               className="input input-bordered w-full"
             />
           </label>
@@ -33,7 +63,7 @@ const AddItems = () => {
                 <span className="label-text">Category*</span>
               </div>
               <select
-                {...register("category", {required: true})}
+                {...register("category", { required: true })}
                 className="select select-bordered w-full"
               >
                 <option disabled selected>
@@ -54,7 +84,7 @@ const AddItems = () => {
               <input
                 type="number"
                 placeholder="Recipe Name"
-                {...register("price", {required: true})}
+                {...register("price", { required: true })}
                 className="input input-bordered w-full"
               />
             </label>
@@ -64,15 +94,21 @@ const AddItems = () => {
               <span className="label-text">Recipe Details*</span>
             </div>
             <textarea
-            {...register('recipe', {required: true})}
+              {...register("recipe", { required: true })}
               className="textarea textarea-bordered h-24"
               placeholder="Recipe Details"
             ></textarea>
           </label>
           <div className="my-6">
-            <input {...register('image', {required: true})} type="file" className="file-input w-full max-w-xs" />
+            <input
+              {...register("image", { required: true })}
+              type="file"
+              className="file-input w-full max-w-xs"
+            />
           </div>
-          <button className="btn flex gap-2" type="submit">Add Item <FaUtensils></FaUtensils></button>
+          <button className="btn btn-neutral flex gap-2" type="submit">
+            Add Item <FaUtensils></FaUtensils>
+          </button>
         </form>
       </div>
     </div>
