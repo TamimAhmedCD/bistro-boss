@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import useAxiosSecure from "./../../../hooks/useAxiosSecure";
 import useCart from "./../../../hooks/useCart";
 import useAuth from "../../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const CheckOutForm = () => {
   const stripe = useStripe();
@@ -13,6 +14,7 @@ const CheckOutForm = () => {
   const axiosSecure = useAxiosSecure();
   const [cart, refetch] = useCart();
   const { user } = useAuth();
+  const navigate = useNavigate()
   const totalPrice = cart.reduce((total, item) => total + item.price, 0);
 
   useEffect(() => {
@@ -88,6 +90,7 @@ const CheckOutForm = () => {
         const res = await axiosSecure.post("/payments", payment);
         console.log("Payment Saved", res.data);
         refetch()
+        navigate('dashboard/payment-history')
       }
     }
   };
